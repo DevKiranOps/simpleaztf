@@ -27,26 +27,18 @@ resource "azurerm_virtual_network" "myapp" {
 }
 
 
+# Create a frontend Subnet
 
-resource "azurerm_resource_group" "myservice" {
-  name     = "tf-service"
-  location = "east us"
+resource "azurerm_subnet" "myapp" {
+  name                 = "frontend"
+  resource_group_name  = azurerm_resource_group.myapp.name
+  virtual_network_name = azurerm_virtual_network.myapp.name
+  address_prefixes     = ["10.0.1.0/24"]
+
+  
 }
 
 
-# Create a Virtual Network
-resource "azurerm_virtual_network" "myservice" {
-  name                = "tf-service-vnet"
-  location            = azurerm_resource_group.myservice.location
-  resource_group_name = azurerm_resource_group.myservice.name
-  address_space       = ["172.16.0.0/16"]
-
-  tags = {
-    Name = "tf-service-vnet"
-    project = "abc"
-    environment = "Testing"
-  }
-}
 
 
 
