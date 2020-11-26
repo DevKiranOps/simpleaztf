@@ -1,0 +1,8 @@
+# Rename this file to terraform.tfvars and supply your own values
+
+resource_group = ""
+location = ""
+web_vm_name = ""
+db_vm_name = ""
+username = ""
+password = ""
