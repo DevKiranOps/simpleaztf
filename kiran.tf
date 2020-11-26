@@ -4,11 +4,11 @@ provider "azurerm" {
   features {}
 }
 
-
-
-
 # Create a resource group
+
 resource "azurerm_resource_group" "myapp" {
   name     = var.resource_group
-  location = var.region
+  location = var.location
 }
+
+

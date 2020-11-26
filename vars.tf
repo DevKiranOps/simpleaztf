@@ -8,7 +8,6 @@ variable "location" {
   
 }
 
-
 variable "web_vm_name" {
   description = "Name of the Virtual Machine for Web"
   default = "webserver-0" 
