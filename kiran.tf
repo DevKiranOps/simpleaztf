@@ -5,8 +5,10 @@ provider "azurerm" {
 }
 
 
+
+
 # Create a resource group
 resource "azurerm_resource_group" "myapp" {
-  name     = "tf-demo"
-  location = "east us"
+  name     = var.resource_group
+  location = var.region
 }

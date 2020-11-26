@@ -1,5 +1,5 @@
 resource "azurerm_virtual_machine" "myapp" {
-  name                  = "webserver-0"
+  name                  = var.web_vm_name
   location              = azurerm_resource_group.myapp.location
   resource_group_name   = azurerm_resource_group.myapp.name
   network_interface_ids = [azurerm_network_interface.myapp.id]
@@ -25,7 +25,7 @@ resource "azurerm_virtual_machine" "myapp" {
   }
   os_profile {
     computer_name  = "webserver-0"
-    admin_username = "azadmin"
+    admin_username = var.username
     
   }
   os_profile_linux_config {
@@ -44,7 +44,7 @@ resource "azurerm_virtual_machine" "myapp" {
 
 
 resource "azurerm_virtual_machine" "db" {
-  name                  = "db-0"
+  name                  = var.db_vm_name
   location              = azurerm_resource_group.myapp.location
   resource_group_name   = azurerm_resource_group.myapp.name
   network_interface_ids = [azurerm_network_interface.db.id]
@@ -70,7 +70,7 @@ resource "azurerm_virtual_machine" "db" {
   }
   os_profile {
     computer_name  = "db-0"
-    admin_username = "azadmin"
+    admin_username = var.username
     
   }
   os_profile_linux_config {
