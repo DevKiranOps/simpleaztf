@@ -48,37 +48,3 @@ resource "azurerm_subnet_network_security_group_association" "web" {
   network_security_group_id = azurerm_network_security_group.web.id
 }
 
-
-
-resource "azurerm_network_security_group" "db" {
-  name                = "db-nsg"
-  location            = azurerm_resource_group.myapp.location
-  resource_group_name = azurerm_resource_group.myapp.name
-
-  tags = {
-    environment = "Testing"
-  }
-}
-
-
-resource "azurerm_network_security_rule" "db" {
-  name                        = "db-rule-0"
-  priority                    = 100
-  direction                   = "Inbound"
-  access                      = "Allow"
-  protocol                    = "Tcp"
-  source_port_range           = "*"
-  destination_port_range      = "3306"
-  source_address_prefix       = "*"
-  destination_address_prefix  = "*"
-  resource_group_name         = azurerm_resource_group.myapp.name
-  network_security_group_name = azurerm_network_security_group.db.name
-}
-
-
-
-
-
-
-
-

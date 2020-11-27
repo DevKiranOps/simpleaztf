@@ -1,17 +1,24 @@
 resource "azurerm_public_ip" "web" {
-  name                = "webserver"
+  count = var.web_nodes
+  name                = "webserver-${count.index}"
   resource_group_name = azurerm_resource_group.myapp.name
   location            = azurerm_resource_group.myapp.location
-  allocation_method   = "Dynamic"
-
+  allocation_method   = "Static"
+  sku = "Standard"
   tags = {
     environment = "Testing"
   }
 }
 
+output "public_ips" {
+  value = azurerm_public_ip.web.*.ip_address
+}
+
+
 
 resource "azurerm_network_interface" "myapp" {
-  name                = "webserver-0"
+  count = var.web_nodes
+  name                = "webserver-count.index"
   location            = azurerm_resource_group.myapp.location
   resource_group_name = azurerm_resource_group.myapp.name
 
@@ -19,22 +26,7 @@ resource "azurerm_network_interface" "myapp" {
     name                          = "internal"
     subnet_id                     = azurerm_subnet.myapp.id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.web.id
+    public_ip_address_id          = element(azurerm_public_ip.web.*.id, count.index)
   }
 }
 
-
-
-
-resource "azurerm_network_interface" "db" {
-  name                = "db-0"
-  location            = azurerm_resource_group.myapp.location
-  resource_group_name = azurerm_resource_group.myapp.name
-
-  ip_configuration {
-    name                          = "internal"
-    subnet_id                     = azurerm_subnet.myapp.id
-    private_ip_address_allocation = "Dynamic"
-    
-  }
-}

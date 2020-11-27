@@ -8,6 +8,11 @@ variable "location" {
   
 }
 
+variable "web_nodes" {
+  description = "No. of web servers"
+  default = 2
+}
+
 variable "web_vm_name" {
   description = "Name of the Virtual Machine for Web"
   default = "webserver-0" 

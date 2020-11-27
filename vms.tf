@@ -1,8 +1,9 @@
 resource "azurerm_virtual_machine" "myapp" {
-  name                  = var.web_vm_name
+  count = var.web_nodes
+  name                  = "${var.web_vm_name}-count.index"
   location              = azurerm_resource_group.myapp.location
   resource_group_name   = azurerm_resource_group.myapp.name
-  network_interface_ids = [azurerm_network_interface.myapp.id]
+  network_interface_ids = [ element(azurerm_network_interface.myapp.*.id, count.index) ]
   vm_size               = "Standard_B1ls"
 
   # Uncomment this line to delete the OS disk automatically when deleting the VM
@@ -41,51 +42,3 @@ resource "azurerm_virtual_machine" "myapp" {
     environment = "testing"
   }
 }
-
-
-resource "azurerm_virtual_machine" "db" {
-  name                  = var.db_vm_name
-  location              = azurerm_resource_group.myapp.location
-  resource_group_name   = azurerm_resource_group.myapp.name
-  network_interface_ids = [azurerm_network_interface.db.id]
-  vm_size               = "Standard_B1s"
-
-  # Uncomment this line to delete the OS disk automatically when deleting the VM
-  # delete_os_disk_on_termination = true
-
-  # Uncomment this line to delete the data disks automatically when deleting the VM
-  # delete_data_disks_on_termination = true
-
-  storage_image_reference {
-    publisher = "Canonical"
-    offer     = "UbuntuServer"
-    sku       = "18.04-LTS"
-    version   = "latest"
-  }
-  storage_os_disk {
-    name              = "mydbdisk1"
-    caching           = "ReadWrite"
-    create_option     = "FromImage"
-    managed_disk_type = "Standard_LRS"
-  }
-  os_profile {
-    computer_name  = "db-0"
-    admin_username = var.username
-    
-  }
-  os_profile_linux_config {
-    disable_password_authentication = true
-
-    ssh_keys {
-      key_data = file("~/.ssh/id_rsa.pub")
-      path     = "/home/azadmin/.ssh/authorized_keys"
-    }
-  }
-
-  tags = {
-    environment = "testing"
-  }
-}
-
-
-
